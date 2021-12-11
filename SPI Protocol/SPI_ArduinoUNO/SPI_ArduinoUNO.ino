@@ -1,42 +1,40 @@
+//SPI SLAVE (ARDUINO)
+//SPI COMMUNICATION BETWEEN TWO ARDUINO 
+//CIRCUIT DIGEST
+//Pramoth.T
+
 #include <SPI.h>
+volatile boolean received;
+volatile byte Slavereceived, Slavesend;
+int buttonvalue;
+int x;
 
-char buff[100];
-volatile byte index;
-volatile bool receivedone;  /* use reception complete flag */
+void setup() {
+    Serial.begin(115200);
 
-void setup(void)
-{
-    Serial.begin(9600);
-    SPCR |= bit(SPE);         /* Enable SPI */
-    pinMode(MISO, OUTPUT);    /* Make MISO pin as OUTPUT */
-    index = 0;
-    receivedone = false;
-    SPI.attachInterrupt();    /* Attach SPI interrupt */
+    pinMode(MISO, OUTPUT);                   //Sets MISO as OUTPUT (Have to Send data to Master IN 
+
+    SPCR |= _BV(SPE);                       //Turn on SPI in Slave Mode
+    received = false;
+
+    SPI.attachInterrupt();                  //Interuupt ON is set for SPI commnucation
+
 }
 
-void loop(void)
+ISR(SPI_STC_vect)                        //Inerrrput routine function 
 {
-    if (receivedone)          /* Check and print received buffer if any */
-    {
-        buff[index] = 0;
-        Serial.println(buff);
-        index = 0;
-        receivedone = false;
-    }
+    Slavereceived = SPDR;         // Value received from master if store in variable slavereceived
+    received = true;                        //Sets received as True 
 }
 
-// SPI interrupt routine
-ISR(SPI_STC_vect)
+void loop()
 {
-    uint8_t oldsrg = SREG;
-    cli();
-    char c = SPDR;
-    if (index < sizeof buff)
+    if (received == true)                            //Logic to SET LED ON OR OFF depending upon the value recerived from master
     {
-        buff[index++] = c;
-        if (c == '\n') {     /* Check for newline character as end of msg */
-            receivedone = true;
-        }
+        x = 24;
+
+        Slavesend = x;
+        SPDR = Slavesend;                           //Sends the x value to master via SPDR 
+        delay(1000);
     }
-    SREG = oldsrg;
 }
