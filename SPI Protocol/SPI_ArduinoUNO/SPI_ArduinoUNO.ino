@@ -31,9 +31,10 @@ void loop()
 {
     if (received == true)                            //Logic to SET LED ON OR OFF depending upon the value recerived from master
     {
-        x = 24;
+        x = -2;
 
         Slavesend = x;
+
         SPDR = Slavesend;                           //Sends the x value to master via SPDR 
         delay(1000);
     }

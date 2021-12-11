@@ -1,14 +1,23 @@
-#include <SPI.h>
+#include<SPI.h>                             //Library for SPI 
 
-char buff[] = "Hello Slave\n";
+int x;
+void setup(void) {
+    Serial.begin(115200);                   //Starts Serial Communication at Baud Rate 115200 
 
-void setup() {
-	Serial.begin(9600); /* begin serial with 9600 baud */
-	SPI.begin();  /* begin SPI */
+
+    SPI.begin();                            //Begins the SPI commnuication
+    SPI.setClockDivider(SPI_CLOCK_DIV8);    //Sets clock for SPI communication at 8 (16/8=2Mhz)
+    digitalWrite(SS, HIGH);                  // Setting SlaveSelect as HIGH (So master doesnt connnect with slave)
 }
 
-void loop() {
-	for (int i = 0; i < sizeof buff; i++)  /* transfer buff data per second */
-		SPI.transfer(buff[i]);
-	delay(1000);
+void loop(void)
+{
+    int Mastersend, Mastereceive;
+
+    Mastersend = x;
+    Mastereceive = SPI.transfer(Mastersend); //Send the mastersend value to slave also receives value from slave
+
+    Serial.println(Mastereceive);
+
+    delay(1000);
 }
