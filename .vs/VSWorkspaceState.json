@@ -1,10 +1,6 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\SPI Protocol",
-    "\\SPI Protocol\\SPI_ArduinoUNO",
-    "\\SPI Protocol\\SPI_NodeMCU"
+    ""
   ],
-  "SelectedNode": "\\SPI Protocol\\SPI_NodeMCU\\SPI_NodeMCU.ino",
   "PreviewInSolutionExplorer": false
 }

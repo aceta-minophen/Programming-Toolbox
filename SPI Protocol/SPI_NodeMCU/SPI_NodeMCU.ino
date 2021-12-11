@@ -12,12 +12,13 @@ void setup(void) {
 
 void loop(void)
 {
-    int Mastersend, Mastereceive;
+    int Mastersend;
+    float Mastereceive;
 
     Mastersend = x;
     Mastereceive = SPI.transfer(Mastersend); //Send the mastersend value to slave also receives value from slave
 
     Serial.println(Mastereceive);
 
-    delay(1000);
+    delay(100);
 }
